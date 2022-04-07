@@ -1,0 +1,17 @@
+<h1>
+  New Users Page
+</h1>
+<% if @user.errors.any? %>
+  <% @user.errors.full_messages.each do |message|%>\
+    <h3><%= message %> </h3>
+  <%end%>
+<%end%>
+<%= form_for @user do |form| %>
+  <%= form.label :username %>
+  <%= form.text_field :username, required: true %><br />
+  <%= form.label :password %>
+  <%= form.password_field :password, required: true %><br />
+  <%= form.label :password_confirmation %>
+  <%= form.password_field :password_confirmation, placeholder: 'Confirm Password' ,required: true %><br />
+  <%= form.submit "Create Account" %>
+<% end %>
