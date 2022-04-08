@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
-  root 'sessions#home'
+  root 'documents#index'
 
   # user routes
   resources :users, only: %i[new create edit update show destroy]
+
+  get '/download', to: 'documents#download'
+  resources :documents
 
   # session routes
   get '/login', to: 'sessions#login'

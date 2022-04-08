@@ -1,0 +1,131 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+ $color-primary: #ff7101;
+ $color-white: #fff;
+ $color-secondary: #27bfc5;
+ $color-red: #e60023;
+
+ *{
+  box-sizing: border-box;
+}
+
+.heading {
+  color: $color-primary;
+}
+
+.app-button {
+  background: $color-white;
+  border: none;
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: $color-primary;
+  cursor: pointer;
+
+  &:hover {
+    background: orange;
+    border: 1px $color-white solid;
+    color: $color-white;
+  }
+}
+
+.create-button {
+  @extend .app-button;
+  border: 1px solid $color-primary;
+  color: $color-primary;
+}
+
+.edit-button {
+  @extend .app-button;
+  border: 1px solid $color-primary;
+  color: $color-primary;
+  font-size: 10px;
+  padding: 4px 8px;
+  &:hover {
+    background: $color-primary;
+    color: $color-white;
+  }
+}
+
+.delete-button {
+  @extend .app-button;
+  border: 1px solid $color-red;
+  color: $color-red;
+  font-size: 10px;
+  padding: 4px 8px;
+  &:hover {
+    background: $color-red;
+    color: $color-white;
+  }
+}
+
+ .navbar {
+  background: $color-primary;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  padding: 8px 20px;
+  color: $color-white;
+  justify-content: space-between;
+
+    &__logo {
+
+      display: flex;
+      align-items: center;
+
+      img {
+        width: 25px;
+        margin-right: 10px;
+      }
+    }
+
+    &__user {
+      display: flex;
+      align-items: center;
+      text-transform: capitalize;
+      button {
+        @extend .app-button;
+        margin-left: 14px;
+      }
+    }
+ }
+
+ main {
+   margin-top: 60px;
+   padding: 0px 1rem;
+
+   .documents-list {
+     display: grid;
+     grid-template-columns: 2fr 4fr 1fr 1fr 1fr;
+     border: 1px solid $color-primary;
+     grid-gap: 10px;
+     padding-left: 10px;
+     padding-top: 10px;
+
+     &__title {
+      color: #27bfc5;
+      font-size: 16px;
+      font-weight: 600;
+     }
+   }
+ }

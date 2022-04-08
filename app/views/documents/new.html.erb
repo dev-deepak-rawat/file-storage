@@ -1,0 +1,7 @@
+<h1 class="heading">Add Your File</h1>
+<% if @document.errors.any? %>
+  <% @document.errors.full_messages.each do |message|%>\
+    <h3><%= message %> </h3>
+  <%end%>
+<%end%>
+<%= render :partial => 'form', locals: { document: @document } %>

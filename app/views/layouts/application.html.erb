@@ -1,12 +1,32 @@
 <!DOCTYPE html>
 <html>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
   <body>
-    <%= yield %>
+    <header>
+      <% if current_user %>
+        <nav class="navbar">
+          <div class="navbar__logo">
+            <%= image_tag "logo.png"%>
+            <span>Files Manager</span>
+          </div>
+          <div class="navbar__user">
+            <span>Hi <%= current_user.username%></span>
+            <% if logged_in? %>
+              <%= button_to "Logout", sessions_path, method: :delete %>
+            <% else %>
+              <%= button_to "Login Page", login_path, method: :get %>
+            <% end %>
+          </div>
+        </nav>
+      <% end %>
+      <% if notice %>
+        <div class="nav__notice"><%= notice %></div>
+      <% end %>
+    </header>
+    <main class="main">
+      <%= yield %>
+    </main>
     <br>
-    <% if logged_in? %>
-      <%= button_to "Logout", sessions_path, method: :delete %>
-    <% else %>
-      <%= button_to "Login Page", login_path, method: :get %>
-    <% end %>
   </body>
 </html>

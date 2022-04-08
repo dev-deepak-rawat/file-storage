@@ -1,0 +1,23 @@
+<h1 class="heading">My Files</h1>
+<% if @documents.empty? %>
+  <p>It feels so empty here!</p>
+<% else %>
+  <div class="documents-list">
+    <span class="documents-list__title">Title</span>
+    <span class="documents-list__title">Description</span>
+    <span class="documents-list__title">Download</span>
+    <span class="documents-list__title">Edit</span>
+    <span class="documents-list__title">Delete</span>
+    <% @documents.each do |doc| %>
+      <span><%= doc.file %></span>
+      <span><%= doc.description %></span>
+      <%= link_to "Download" , download_path(file: doc.file, id: session[:user_id].to_s), method: :get %>
+      <%= button_to "Edit" , edit_document_path(doc), class: 'edit-button', method: :get %>
+      <%= button_to 'Delete', document_path(doc), method: :delete, class: 'delete-button' %>
+      <br />
+    <% end %>
+  </div>
+<% end %>
+<br />
+<br />
+<%=button_to 'Add file', new_document_path, method: :get, class: 'create-button' %>

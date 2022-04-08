@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
     if @user && @user.authenticate(params[:password])
       # set session and redirect on success
       session[:user_id] = @user.id
-      redirect_to @user
+      redirect_to documents_url
     else
       # error message on fail
       message = 'Something went wrong! Make sure your username and password are correct.'
