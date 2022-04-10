@@ -119,8 +119,7 @@
      grid-template-columns: 2fr 4fr 1fr 1fr 1fr;
      border: 1px solid $color-primary;
      grid-gap: 10px;
-     padding-left: 10px;
-     padding-top: 10px;
+     padding: 10px;
 
      &__title {
       color: #27bfc5;
@@ -128,4 +127,56 @@
       font-weight: 600;
      }
    }
+ }
+
+ .form {
+   width: 40%;
+   margin: auto;
+   padding: 0 20px;
+
+   form {
+    display: flex;
+    flex-direction: column;
+   }
+
+   input {
+    margin-bottom: 15px;
+    margin-bottom: 15px;
+
+    &[type=text], &[type=password] {
+      line-height: 1.7rem;
+      border-radius: 5px;
+      border: 1px gray solid;
+    }
+
+    &[type=submit] {
+      font-size: 14px;
+      padding: 8px;
+      margin-top: 10px;
+    }
+   }
+
+   .login-signup {
+     display: flex;
+     align-items: center;
+     button {
+      font-size: 11px;
+      padding: 5px 40px;
+      margin-left: 10px;
+     }
+   }
+ }
+
+ .notice {
+  position: absolute;
+  right: 10px;
+  top: 50px;
+  background: $color-primary;
+  padding: 15px;
+  border-radius: 5px;
+  color: $color-white;
+
+  &__error {
+    background: $color-red;
+  }
  }

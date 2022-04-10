@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
+  <title>File Manager</title>
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
   <body>
     <header>
-      <% if current_user %>
-        <nav class="navbar">
-          <div class="navbar__logo">
-            <%= image_tag "logo.png"%>
-            <span>Files Manager</span>
-          </div>
+      <nav class="navbar">
+        <div class="navbar__logo">
+          <%= image_tag "logo.png"%>
+          <span>Files Manager</span>
+        </div>
+        <% if current_user %>
           <div class="navbar__user">
             <span>Hi <%= current_user.username%></span>
             <% if logged_in? %>
@@ -18,8 +19,8 @@
               <%= button_to "Login Page", login_path, method: :get %>
             <% end %>
           </div>
-        </nav>
-      <% end %>
+        <% end %>
+      </nav>
       <% if notice %>
         <div class="nav__notice"><%= notice %></div>
       <% end %>

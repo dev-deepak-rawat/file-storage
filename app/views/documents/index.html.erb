@@ -12,9 +12,16 @@
       <span><%= doc.file %></span>
       <span><%= doc.description %></span>
       <%= link_to "Download" , download_path(file: doc.file, id: session[:user_id].to_s), method: :get %>
-      <%= button_to "Edit" , edit_document_path(doc), class: 'edit-button', method: :get %>
+      <%= button_to "Edit" , edit_document_path(doc),
+      class: 'edit-button',
+      method: :get,
+      params: {
+        file: doc.file,
+        title: doc.title,
+        description: doc.description,
+        id: doc.id
+        } %>
       <%= button_to 'Delete', document_path(doc), method: :delete, class: 'delete-button' %>
-      <br />
     <% end %>
   </div>
 <% end %>

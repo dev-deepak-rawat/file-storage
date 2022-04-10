@@ -18,8 +18,8 @@ class DocumentsController < ApplicationController
     @document.title = document_params[:title]
     @document.description = document_params[:description]
     input_file = document_params[:file]
-    input_file_name = input_file.original_filename
-    @document.file = input_file_name
+    input_file_extension = File.extname(input_file.original_filename)
+    @document.file = "#{@document.title}#{input_file_extension}"
 
     input_file_dir = Rails.root.join(path_to_file_dir)
 
@@ -28,7 +28,7 @@ class DocumentsController < ApplicationController
       if @document.save
         Dir.mkdir('uploads') unless Dir.exist?('uploads')
         Dir.mkdir(input_file_dir) unless Dir.exist?(input_file_dir)
-        File.open(Rails.root.join(path_to_file(input_file_name)), 'wb') do |file|
+        File.open(Rails.root.join(path_to_file(@document.file)), 'wb') do |file|
           file.write(input_file.read)
         end
         redirect_to documents_url, notice: 'File uploaded successfully!'
@@ -45,7 +45,16 @@ class DocumentsController < ApplicationController
     @document = Document.new(documents_params)
   end
 
-  def update; end
+  def update
+    update_params = documents_params
+    file_extension = File.extname(update_params[:file])
+    update_params[:file] = "#{update_params[:title]}#{file_extension}"
+    if Document.update(update_params)
+      redirect_to documents_url, notice: 'File updated successfully!'
+    else
+      render :edit, status: :unprocessable_entity, notice: 'Something went wrong'
+    end
+  end
 
   def download
     send_file path_to_file(Rails.root.join('uploads', params[:id], params[:file])), x_sendfile: true
@@ -54,7 +63,7 @@ class DocumentsController < ApplicationController
   def destroy
     @document = current_user.documents.find(params[:id])
     file_name = @document.file
-    File.delete(path_to_file(file_name)) if File.exist?(path_to_file)
+    File.delete(path_to_file(file_name)) if File.exist?(path_to_file_dir)
     if @document.destroy
       redirect_to documents_url, notice: 'File deleted successfully!'
     else
@@ -65,6 +74,6 @@ class DocumentsController < ApplicationController
   private
 
   def documents_params
-    @params.require(:documents).permit(:title, :description)
+    params.permit(:title, :description, :file, :id)
   end
 end

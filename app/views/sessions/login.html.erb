@@ -1,11 +1,17 @@
 <% if !!notice %>
   <h4><%= notice %></h4>
 <% end %>
-<div>
-  <h2>Log In</h2>
+<div class="form">
+  <h2 class="heading">Log In</h2>
   <%= form_tag login_path do %>
-    Username: <%= text_field_tag :username%><br />
-    Password: <%= password_field_tag :password%><br />
-    <%= submit_tag 'Log In' %>
+    <label>Username</label>
+    <%= text_field_tag :username %>
+    <label>Password</label>
+    <%= password_field_tag :password %>
+    <%= submit_tag 'Log In', class: 'edit-button' %>
   <% end %>
+  <div class="login-signup">
+    <p>Doesn't have an account?</p>
+    <%= button_to 'Signup', new_user_path, method: :get, class: 'edit-button'%>
+  </div>
 </div>
