@@ -47,8 +47,14 @@ class DocumentsController < ApplicationController
 
   def update
     update_params = documents_params
-    file_extension = File.extname(update_params[:file])
+    old_file_name = update_params[:file]
+    file_extension = File.extname(old_file_name)
     update_params[:file] = "#{update_params[:title]}#{file_extension}"
+
+    File.open(path_to_file(old_file_name)) do |file|
+      File.rename(file, path_to_file(update_params[:file]))
+    end
+
     if Document.update(update_params)
       redirect_to documents_url, notice: 'File updated successfully!'
     else
