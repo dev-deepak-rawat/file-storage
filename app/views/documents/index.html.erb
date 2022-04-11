@@ -12,8 +12,17 @@
     <% @documents.each do |doc| %>
       <span><%= doc.file %></span>
       <span><%= doc.description %></span>
-      <span><%= "#{request.base_url}/download?file=#{doc.file}&id=#{session[:user_id]}" %></span>
-      <%= link_to "Download" , download_path(file: doc.file, id: session[:user_id].to_s), method: :get %>
+      <% if doc.public_share %>
+        <div>
+          <%= button_to "Revoke Public Access" , share_path, params: { id: doc.id }, class: 'edit-button share-button', method: :get %>
+          <span class="share-url"><%= "#{request.base_url}/download?id=#{doc.id}" %></span>
+        </div>
+      <% else %>
+        <div>
+          <%= button_to "Grant Public Access" , share_path, params: { id: doc.id }, class: 'edit-button share-button', method: :get %>
+        </div>
+      <% end %>
+      <%= link_to "Download" , download_path(id: doc.id), method: :get %>
       <%= button_to "Edit" , edit_document_path(doc), class: 'edit-button', method: :get %>
       <%= button_to 'Delete', document_path(doc), method: :delete, class: 'delete-button' %>
     <% end %>

@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   # user routes
   resources :users, only: %i[new create edit update show destroy]
 
+  get '/share/', to: 'documents#share'
   get '/download', to: 'documents#download'
   resources :documents
 

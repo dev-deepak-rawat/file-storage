@@ -64,7 +64,22 @@ class DocumentsController < ApplicationController
   end
 
   def download
-    send_file path_to_file(Rails.root.join('uploads', params[:id], params[:file])), x_sendfile: true
+    target_document = Document.find(params[:id])
+    if target_document && (
+      target_document.public_share || target_document.user_id == session[:user_id]
+    )
+      send_file path_to_file(Rails.root.join(
+                               'uploads', target_document.user_id.to_s, target_document[:file]
+                             )), x_sendfile: true
+    else
+      render file: 'public/404.html', status: :unauthorized
+    end
+  end
+
+  def share
+    target_document = Document.find(params[:id])
+    target_document.update(public_share: !target_document.public_share)
+    redirect_to documents_url
   end
 
   def destroy
