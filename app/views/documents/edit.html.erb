@@ -3,11 +3,5 @@
 <%end%>
 <div class="form">
   <h1 class="heading">Edit Your File</h1>
-  <%= form_tag document_path(@document, file: @document.file, id: @document.id), method: :put do %>
-    <label>Title</label>
-    <%= text_field_tag 'title', @document.title %>
-    <label>Description</label>
-    <%= text_field_tag 'description', @document.description %>
-    <%= submit_tag 'Update File', class: 'edit-button' %>
-  <% end %>
+  <%= render 'form', document: @document, type: 'edit'%>
 </div>

@@ -3,6 +3,10 @@
   <%= form.text_field :title, required: true %>
   <%= form.label :description %>
   <%= form.text_field :description, required: true %>
-  <%= form.file_field :file, required: true %>
-  <%= form.submit "Upload document", class: "create-button" %>
+  <% if type == 'new' %>
+    <%= form.file_field :file, required: true %>
+  <% else %>
+    <%= form.text_field :file, hidden: true %>
+  <% end %>
+  <%= form.submit (type == 'new' ? "Upload document" : 'Update File'), class: "create-button" %>
 <% end %>

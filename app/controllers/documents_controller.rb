@@ -42,10 +42,11 @@ class DocumentsController < ApplicationController
   end
 
   def edit
-    @document = Document.new(documents_params)
+    @document = Document.find(params[:id])
   end
 
   def update
+    @document = current_user.documents.find(params[:id])
     update_params = documents_params
     old_file_name = update_params[:file]
     file_extension = File.extname(old_file_name)
@@ -55,7 +56,7 @@ class DocumentsController < ApplicationController
       File.rename(file, path_to_file(update_params[:file]))
     end
 
-    if Document.update(update_params)
+    if @document.update(update_params)
       redirect_to documents_url, notice: 'File updated successfully!'
     else
       render :edit, status: :unprocessable_entity, notice: 'Something went wrong'
@@ -80,6 +81,6 @@ class DocumentsController < ApplicationController
   private
 
   def documents_params
-    params.permit(:title, :description, :file, :id)
+    params.require(:document).permit(:title, :description, :file, :id)
   end
 end
