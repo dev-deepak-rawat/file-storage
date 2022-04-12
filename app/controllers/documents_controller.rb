@@ -7,6 +7,7 @@ class DocumentsController < ApplicationController
   def index
     @documents = current_user.documents.all
     @users = User.all
+    @shared_documents = Document.all.select { |doc| doc.permissions.split(':').include? session[:user_id].to_s }
   end
 
   def new

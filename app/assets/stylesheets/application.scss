@@ -255,3 +255,13 @@
     background: $color-red;
   }
  }
+
+ .shared-documents {
+   margin-top: 20px;
+   .heading {
+     font-size: 1.5em;
+   }
+  .documents-list {
+    grid-template-columns: 1fr 1fr 1fr;
+ }
+}

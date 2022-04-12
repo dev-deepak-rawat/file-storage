@@ -54,6 +54,21 @@
     <% end %>
   </div>
 <% end %>
+<div class="shared-documents">
+  <% if !@shared_documents.empty? %>
+    <h1 class="heading">Files shared with me</h1>
+    <div class="documents-list">
+      <span class="documents-list__title">Title</span>
+      <span class="documents-list__title">Description</span>
+      <span class="documents-list__title">Download</span>
+      <% @shared_documents.each do |doc| %>
+        <span><%= doc.file %></span>
+        <span><%= doc.description %></span>
+        <%= link_to "Download" , download_path(id: doc.id), method: :get %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
 <br />
 <br />
 <%=button_to 'Add file', new_document_path, method: :get, class: 'create-button' %>
