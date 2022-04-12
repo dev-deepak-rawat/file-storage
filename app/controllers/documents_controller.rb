@@ -6,6 +6,7 @@ class DocumentsController < ApplicationController
 
   def index
     @documents = current_user.documents.all
+    @users = User.all
   end
 
   def new
@@ -66,7 +67,9 @@ class DocumentsController < ApplicationController
   def download
     target_document = Document.find(params[:id])
     if target_document && (
-      target_document.public_share || target_document.user_id == session[:user_id]
+      target_document.public_share || target_document.user_id == session[:user_id] || (
+        target_document.permissions.split(':').include? session[:user_id].to_s
+      )
     )
       send_file path_to_file(Rails.root.join(
                                'uploads', target_document.user_id.to_s, target_document[:file]
@@ -79,6 +82,17 @@ class DocumentsController < ApplicationController
   def share
     target_document = Document.find(params[:id])
     target_document.update(public_share: !target_document.public_share)
+    redirect_to documents_url
+  end
+
+  # def private_share; end
+  def private_share
+    target_document = Document.find(params[:id])
+    permissions_arr = target_document.permissions.split(':')
+    curr_user_id = params[:user_id].to_s
+    target_document.update(
+      permissions: params[:type] == 'share' ? permissions_arr.push(curr_user_id).join(':') : (permissions_arr - [curr_user_id]).join(':')
+    )
     redirect_to documents_url
   end
 

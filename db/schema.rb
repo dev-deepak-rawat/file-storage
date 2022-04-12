@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_11_100713) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_12_095514) do
   create_table "documents", force: :cascade do |t|
     t.string "title"
     t.string "description"
@@ -19,6 +19,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_11_100713) do
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.boolean "public_share", default: false, null: false
+    t.string "permissions", default: "", null: false
     t.index ["user_id"], name: "index_documents_on_user_id"
   end
 

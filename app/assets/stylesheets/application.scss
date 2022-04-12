@@ -18,6 +18,8 @@
  $color-white: #fff;
  $color-secondary: #27bfc5;
  $color-red: #e60023;
+ $color-success: #4BB543;
+ $color-warning: #ffc107;
 
  *{
   box-sizing: border-box;
@@ -116,10 +118,12 @@
 
    .documents-list {
      display: grid;
-     grid-template-columns: 2fr 2fr 2fr 1fr 1fr 1fr;
+     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+     grid-template-rows: auto;
      border: 1px solid $color-primary;
      grid-gap: 10px;
      padding: 10px;
+     
 
      &__title {
       color: #27bfc5;
@@ -138,6 +142,63 @@
       font-size: 12px;
       font-weight: 500;
       color: blue;
+     }
+
+     .private-share {
+       align-items: flex-start;
+       grid-column-start: 1;
+       grid-column-end: 7;
+       display: flex;
+       margin: 10px 15px;
+
+       &__title {
+        color: $color-secondary;
+        margin-right: 15px;
+        align-items: center;
+       }
+
+       &__user {
+        margin: 0 10px;
+       }
+
+       &__name {
+        color: #fff;
+        text-transform: capitalize;
+        text-align: center;
+        border-radius: 8px;
+        padding: 1px 3px;
+        &--share {
+          background: $color-warning;
+        }
+        &--revoke {
+           background: $color-success;
+        }
+       }
+
+       &__button {
+        font-size: 10px;
+        font-weight: 600;
+        border: none;
+        background: none;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-radius: 5px;
+        &--share {
+          color: $color-success;
+          &:hover {
+             background: $color-success;
+             color: $color-white;
+          }
+        }
+        &--revoke {
+          color: $color-red;
+          &:hover {
+            background: $color-red;
+            color: $color-white;
+          }
+        }
+
+       }
      }
    }
  }

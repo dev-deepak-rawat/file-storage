@@ -13,18 +13,44 @@
       <span><%= doc.file %></span>
       <span><%= doc.description %></span>
       <% if doc.public_share %>
-        <div>
+        <div >
           <%= button_to "Revoke Public Access" , share_path, params: { id: doc.id }, class: 'edit-button share-button', method: :get %>
           <span class="share-url"><%= "#{request.base_url}/download?id=#{doc.id}" %></span>
         </div>
       <% else %>
-        <div>
+        <div >
           <%= button_to "Grant Public Access" , share_path, params: { id: doc.id }, class: 'edit-button share-button', method: :get %>
         </div>
       <% end %>
       <%= link_to "Download" , download_path(id: doc.id), method: :get %>
       <%= button_to "Edit" , edit_document_path(doc), class: 'edit-button', method: :get %>
       <%= button_to 'Delete', document_path(doc), method: :delete, class: 'delete-button' %>
+      <div class="private-share">
+        <span class="private-share__title">Private Share</span>
+        <% @users.each do |user|%>
+          <%if user.id != session[:user_id]%>
+            <div class="private-share__user">
+              <% if (doc.permissions.split(':')).include? user.id.to_s%>
+                <div class="private-share__name private-share__name--revoke"><%= user.username%></div>
+                <%= button_to 'Revoke',
+                share_private_path,
+                params: { id: doc.id, type: 'revoke', user_id: user.id.to_s },
+                method: :get,
+                class: 'private-share__button private-share__button--revoke'
+              %>
+              <% else %>
+                <div class="private-share__name private-share__name--share"><%= user.username%></div>
+                <%= button_to 'Share',
+                share_private_path,
+                params: { id: doc.id, type: 'share', user_id: user.id.to_s },
+                method: :get,
+                class: 'private-share__button private-share__button--share'
+              %>
+              <% end %>
+            </div>
+          <%end%>
+        <% end %>
+      </div>
     <% end %>
   </div>
 <% end %>

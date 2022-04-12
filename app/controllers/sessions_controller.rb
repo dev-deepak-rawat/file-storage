@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
       redirect_to documents_url
     else
       # error message on fail
-      message = 'Something went wrong! Make sure your username and password are correct.'
+      message = 'Make sure your username and password are correct.'
       redirect_to login_url, notice: message
     end
   end
