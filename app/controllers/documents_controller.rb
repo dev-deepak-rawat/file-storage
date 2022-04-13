@@ -5,9 +5,9 @@ class DocumentsController < ApplicationController
   before_action :authorized, except: :download
 
   def index
-    @documents = current_user.documents.all
-    @users = User.all
-    @shared_documents = Document.all.select { |doc| doc.permissions.split(':').include? session[:user_id].to_s }
+    @documents = User.get_user_docs_with_permission(current_user, Permission.accesses['owner'])
+    @rest_users = User.where.not(id: session[:user_id])
+    @shared_documents = User.get_user_docs_with_permission(current_user, Permission.accesses['guest'])
   end
 
   def new
@@ -33,6 +33,7 @@ class DocumentsController < ApplicationController
         File.open(Rails.root.join(path_to_file(@document.file)), 'wb') do |file|
           file.write(input_file.read)
         end
+        Permission.create(user: current_user, document: @document)
         redirect_to documents_url, notice: 'File uploaded successfully!'
       else
         render :new, status: :unprocessable_entity
@@ -66,18 +67,18 @@ class DocumentsController < ApplicationController
   end
 
   def download
-    target_document = Document.find(params[:id])
-    if target_document && (
-      target_document.public_share || target_document.user_id == session[:user_id] || (
-        target_document.permissions.split(':').include? session[:user_id].to_s
-      )
-    )
+    permission = Permission.find_by_user_and_doc_id(session[:user_id], params[:id])
+    document = Document.find(params[:id])
+    document_owner_id = document.permissions.owner.pluck(:user_id).first
+    if document&.public_share || permission
       send_file path_to_file(Rails.root.join(
-                               'uploads', target_document.user_id.to_s, target_document[:file]
+                               'uploads', document_owner_id.to_s, document[:file]
                              )), x_sendfile: true
     else
       render file: 'public/404.html', status: :unauthorized
     end
+  rescue ActiveRecord::RecordNotFound
+    render file: 'public/404.html', status: :unauthorized
   end
 
   def share
@@ -86,15 +87,15 @@ class DocumentsController < ApplicationController
     redirect_to documents_url
   end
 
-  # def private_share; end
   def private_share
-    target_document = Document.find(params[:id])
-    permissions_arr = target_document.permissions.split(':')
-    curr_user_id = params[:user_id].to_s
-    target_document.update(
-      permissions: params[:type] == 'share' ? permissions_arr.push(curr_user_id).join(':') : (permissions_arr - [curr_user_id]).join(':')
-    )
-    redirect_to documents_url
+    user = User.find(params[:user_id])
+    if params[:type] == 'share'
+      document = Document.find(params[:id])
+      redirect_to documents_url if Permission.create(user: user, document: document, access: :guest)
+    else
+      Permission.find_by_user_and_doc_id(params[:user_id], params[:id]).destroy
+      redirect_to documents_url
+    end
   end
 
   def destroy

@@ -27,28 +27,26 @@
       <%= button_to 'Delete', document_path(doc), method: :delete, class: 'delete-button' %>
       <div class="private-share">
         <span class="private-share__title">Private Share</span>
-        <% @users.each do |user|%>
-          <%if user.id != session[:user_id]%>
-            <div class="private-share__user">
-              <% if (doc.permissions.split(':')).include? user.id.to_s%>
-                <div class="private-share__name private-share__name--revoke"><%= user.username%></div>
-                <%= button_to 'Revoke',
+        <% @rest_users.each do |user|%>
+          <div class="private-share__user">
+            <% if user.documents.where(id: doc.id).empty?%>
+              <div class="private-share__name private-share__name--share"><%= user.username%></div>
+              <%= button_to 'Share',
                 share_private_path,
-                params: { id: doc.id, type: 'revoke', user_id: user.id.to_s },
-                method: :get,
-                class: 'private-share__button private-share__button--revoke'
-              %>
-              <% else %>
-                <div class="private-share__name private-share__name--share"><%= user.username%></div>
-                <%= button_to 'Share',
-                share_private_path,
-                params: { id: doc.id, type: 'share', user_id: user.id.to_s },
+                params: { id: doc.id, type: 'share', user_id: user.id },
                 method: :get,
                 class: 'private-share__button private-share__button--share'
               %>
-              <% end %>
-            </div>
-          <%end%>
+            <% else %>
+              <div class="private-share__name private-share__name--revoke"><%= user.username%></div>
+              <%= button_to 'Revoke',
+                share_private_path,
+                params: { id: doc.id, type: 'revoke', user_id: user.id },
+                method: :get,
+                class: 'private-share__button private-share__button--revoke'
+              %>
+            <% end %>
+          </div>
         <% end %>
       </div>
     <% end %>

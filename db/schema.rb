@@ -10,17 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_04_12_095514) do
+ActiveRecord::Schema[7.0].define(version: 2022_04_13_070337) do
   create_table "documents", force: :cascade do |t|
     t.string "title"
     t.string "description"
     t.string "file"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id", null: false
     t.boolean "public_share", default: false, null: false
-    t.string "permissions", default: "", null: false
-    t.index ["user_id"], name: "index_documents_on_user_id"
+  end
+
+  create_table "permissions", force: :cascade do |t|
+    t.integer "access", default: 0, null: false
+    t.integer "document_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["document_id"], name: "index_permissions_on_document_id"
+    t.index ["user_id"], name: "index_permissions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -30,5 +37,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_04_12_095514) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "documents", "users"
+  add_foreign_key "permissions", "documents"
+  add_foreign_key "permissions", "users"
 end
